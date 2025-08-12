@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Visualización • Cielo Pastel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-start: #eaf6ff;
+        --bg-end: #d5ebff;
+        --primary: #7eb8ff;
+        --primary-600: #5aa3ff;
+        --primary-300: #a9d4ff;
+        --text: #14364f;
+        --muted: #547490;
+        --card-bg: rgba(255, 255, 255, 0.65);
+        --card-border: rgba(126, 184, 255, 0.35);
+        --shadow: 0 12px 28px rgba(20, 54, 79, 0.12);
+        --radius: 18px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { height: 100%; }
+
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(900px 600px at 15% 0%, #f7fbff 0%, transparent 60%),
+          radial-gradient(1100px 700px at 85% 20%, #f0f8ff 0%, transparent 60%),
+          linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      }
+
+      .aura {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .aura::before,
+      .aura::after {
+        content: "";
+        position: absolute;
+        width: 60vw;
+        height: 60vw;
+        filter: blur(60px);
+        opacity: 0.25;
+        border-radius: 50%;
+        transform: translate(-20%, -20%);
+      }
+      .aura::before {
+        top: -10vh; left: -10vw;
+        background: radial-gradient(circle at 30% 30%, var(--primary) 0%, transparent 60%);
+      }
+      .aura::after {
+        bottom: -20vh; right: -15vw;
+        background: radial-gradient(circle at 70% 70%, var(--primary-300) 0%, transparent 60%);
+      }
+
+      header.site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: saturate(140%) blur(8px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.25));
+        border-bottom: 1px solid rgba(126, 184, 255, 0.25);
+      }
+      .nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      .logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-300));
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), 0 8px 18px rgba(90,163,255,0.25);
+        display: grid;
+        place-items: center;
+        color: white;
+        font-weight: 700;
+      }
+      .brand-title {
+        background: linear-gradient(135deg, #0f4c81, #3e7acb);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-size: 1.05rem;
+      }
+      .cta {
+        color: white;
+        background: linear-gradient(135deg, var(--primary-600), var(--primary));
+        padding: 10px 14px;
+        border-radius: 12px;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(90, 163, 255, 0.25);
+        border: 1px solid rgba(255,255,255,0.6);
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(90,163,255,0.35); }
+
+      main.container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 36px 20px 60px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 22px;
+        align-items: center;
+        margin-top: 12px;
+        margin-bottom: 26px;
+      }
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+        line-height: 1.15;
+        letter-spacing: 0.2px;
+      }
+      .hero p { margin: 0; color: var(--muted); }
+
+      .glass-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        box-shadow: var(--shadow);
+        border-radius: var(--radius);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 22px;
+      }
+
+      .section-title {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #0f4c81;
+        letter-spacing: 0.2px;
+      }
+
+      .chart-card { padding: 16px; }
+
+      .dropzone {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 360px;
+        border: 2px dashed rgba(90, 163, 255, 0.5);
+        border-radius: calc(var(--radius) - 6px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.5));
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        overflow: hidden;
+      }
+      .dropzone.is-dragover { border-color: var(--primary-600); transform: translateY(-1px); }
+
+      .dz-inner { text-align: center; padding: 16px; }
+      .dz-icon {
+        width: 56px; height: 56px; margin: 2px auto 8px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-300));
+        border-radius: 18px;
+        display: grid; place-items: center; color: white;
+        box-shadow: 0 10px 22px rgba(90,163,255,0.28), inset 0 0 0 1px rgba(255,255,255,0.7);
+      }
+      .dz-title { font-weight: 600; }
+      .dz-sub { color: var(--muted); font-size: 0.95rem; }
+
+      .dz-actions { margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+      .btn {
+        --pad-x: 12px; --pad-y: 10px;
+        padding: var(--pad-y) var(--pad-x);
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.7);
+        background: white;
+        color: var(--text);
+        font-weight: 600;
+        box-shadow: 0 6px 16px rgba(20, 54, 79, 0.08);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+      .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(20,54,79,0.12); }
+      .btn.primary { background: linear-gradient(135deg, var(--primary-600), var(--primary)); color: white; }
+
+      input[type="file"] { display: none; }
+
+      .svg-stage {
+        width: 100%;
+        height: 100%;
+        max-height: 62vh;
+        display: grid;
+        place-items: center;
+        overflow: auto;
+      }
+      .svg-stage svg { width: 100%; height: auto; display: block; }
+
+      .tools-card { padding: 16px; }
+      .steps { margin: 8px 0 0 0; padding-left: 18px; color: var(--muted); }
+      .steps li { margin: 6px 0; }
+
+      .panel {
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.75);
+        border: 1px solid rgba(126, 184, 255, 0.35);
+      }
+      .panel h4 { margin: 6px 0 10px; font-size: 0.98rem; }
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        resize: vertical;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(126, 184, 255, 0.45);
+        background: #ffffff;
+      }
+
+      .footer {
+        margin-top: 36px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 920px) {
+        .hero, .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aura" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="nav">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">◎</div>
+          <div class="brand-title">Cielo Pastel</div>
+        </div>
+        <a class="cta" href="#importar">Agregar gráfico</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div>
+          <h1>Un espacio sereno para tus datos</h1>
+          <p>Diseñado en tonos celeste y azul pastel. Aquí podrás insertar fácilmente un SVG exportado desde <strong>RAWGraphs</strong>.</p>
+        </div>
+        <div class="glass-card" style="padding:16px;">
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div class="dz-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 16V4m0 0l-4 4m4-4l4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="3.75" y="13.75" width="16.5" height="5.5" rx="2.75" stroke="white" stroke-width="1.5" opacity=".85"/>
+              </svg>
+            </div>
+            <div>
+              <div class="section-title" style="margin-bottom:4px;">Listo para tu SVG</div>
+              <p style="margin:0; color:var(--muted);">Exporta en RAWGraphs → formato SVG → arrastra, sube o pega el código aquí abajo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid" id="importar">
+        <div class="glass-card chart-card">
+          <div class="section-title">Tu gráfico</div>
+
+          <div class="dropzone" id="dropzone">
+            <input id="fileInput" type="file" accept=".svg,image/svg+xml" />
+            <div class="dz-inner" id="placeholder">
+              <div class="dz-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 7.5h16M4 12h16M4 16.5h10" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="dz-title">Arrastra tu archivo SVG aquí</div>
+              <div class="dz-sub">o usa una de estas opciones</div>
+              <div class="dz-actions">
+                <label class="btn primary" for="fileInput">Subir .svg</label>
+                <button class="btn" id="togglePaste">Pegar código SVG</button>
+                <button class="btn" id="resetBtn" hidden>Quitar gráfico</button>
+              </div>
+              <div class="panel" id="pastePanel" hidden>
+                <h4>Pega aquí el SVG exportado</h4>
+                <textarea id="svgTextarea" placeholder="&lt;svg ...&gt; ... &lt;/svg&gt;"></textarea>
+                <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                  <button class="btn" id="renderBtn">Insertar</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="svg-stage" id="svgStage" aria-live="polite" aria-busy="false" hidden></div>
+          </div>
+        </div>
+
+        <aside class="glass-card tools-card">
+          <div class="section-title">Cómo agregar tu gráfico de RAWGraphs</div>
+          <ol class="steps">
+            <li>En RAWGraphs, genera tu visualización y elige <strong>Export → SVG</strong>.</li>
+            <li>Vuelve aquí y arrastra el archivo, o usa <strong>Subir .svg</strong>.</li>
+            <li>Alternativamente, copia el código y usa <strong>Pegar código SVG</strong>.</li>
+            <li>El SVG se ajustará al ancho disponible y respetará el diseño azul pastel.</li>
+          </ol>
+
+          <div class="panel" style="margin-top:14px;">
+            <h4>Consejos de estilo</h4>
+            <ul style="margin:0; padding-left: 18px; color: var(--muted);">
+              <li>Prefiere tipografías legibles y colores suaves para mantener la estética.</li>
+              <li>Si tu SVG tiene tamaños fijos, considera eliminar width/height y mantener <code>viewBox</code>.</li>
+              <li>Puedes ajustar colores dentro del SVG para que combinen con los azules de la página.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <div class="footer">Hecho con calma y tonos celestes ✨</div>
+    </main>
+
+    <script>
+      (function init() {
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const togglePaste = document.getElementById('togglePaste');
+        const pastePanel = document.getElementById('pastePanel');
+        const textarea = document.getElementById('svgTextarea');
+        const renderBtn = document.getElementById('renderBtn');
+        const placeholder = document.getElementById('placeholder');
+        const svgStage = document.getElementById('svgStage');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function showSVG(svgString) {
+          if (!svgString || typeof svgString !== 'string') return;
+          // Sencilla normalización: si viene envuelto en XML/doctype, intentamos extraer el <svg>...
+          const svgMatch = svgString.match(/<svg[\s\S]*?<\/svg>/i);
+          const content = svgMatch ? svgMatch[0] : svgString.trim();
+          svgStage.innerHTML = content;
+          placeholder.hidden = true;
+          svgStage.hidden = false;
+          resetBtn.hidden = false;
+          // Asegura que el SVG se adapte al contenedor si trae width/height fijos
+          const svgEl = svgStage.querySelector('svg');
+          if (svgEl) {
+            svgEl.removeAttribute('width');
+            svgEl.removeAttribute('height');
+            svgEl.style.width = '100%';
+            svgEl.style.height = 'auto';
+            svgEl.setAttribute('preserveAspectRatio', svgEl.getAttribute('preserveAspectRatio') || 'xMidYMid meet');
+          }
+        }
+
+        function resetSVG() {
+          svgStage.innerHTML = '';
+          svgStage.hidden = true;
+          placeholder.hidden = false;
+          resetBtn.hidden = true;
+        }
+
+        // Abrir/cerrar panel de pegado
+        togglePaste.addEventListener('click', () => {
+          pastePanel.hidden = !pastePanel.hidden;
+          if (!pastePanel.hidden) textarea.focus();
+        });
+
+        renderBtn.addEventListener('click', () => {
+          showSVG(textarea.value);
+        });
+
+        // Subida de archivo
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => showSVG(String(e.target?.result || ''));
+          reader.readAsText(file);
+        });
+
+        // Drag & drop
+        ['dragenter','dragover'].forEach(evt => {
+          dropzone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('is-dragover');
+          });
+        });
+        ['dragleave','drop'].forEach(evt => {
+          dropzone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (evt === 'dragleave') dropzone.classList.remove('is-dragover');
+          });
+        });
+        dropzone.addEventListener('drop', (e) => {
+          dropzone.classList.remove('is-dragover');
+          const dt = e.dataTransfer;
+          if (!dt) return;
+          const file = dt.files && dt.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => showSVG(String(ev.target?.result || ''));
+            reader.readAsText(file);
+          } else {
+            const text = dt.getData('text/plain');
+            if (text) showSVG(text);
+          }
+        });
+
+        resetBtn.addEventListener('click', resetSVG);
+      })();
+    </script>
+  </body>
+</html>
