@@ -1,40 +1,646 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>SPs Aitor</title>
-  </head>
-  <body>
-    <div class='tableauPlaceholder' id='viz1755629227721' style='position: relative'>
-      <noscript>
-        <a href='#'>
-          <img alt='Cantidad SPs Resueltos por tipo de tarea ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;F8&#47;F8SGQMMCK&#47;1_rss.png' style='border: none' />
-        </a>
-      </noscript>
-      <object class='tableauViz' style='display:none;'>
-        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-        <param name='embed_code_version' value='3' />
-        <param name='path' value='shared&#47;F8SGQMMCK' />
-        <param name='toolbar' value='yes' />
-        <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;F8&#47;F8SGQMMCK&#47;1.png' />
-        <param name='animate_transition' value='yes' />
-        <param name='display_static_image' value='yes' />
-        <param name='display_spinner' value='yes' />
-        <param name='display_overlay' value='yes' />
-        <param name='display_count' value='yes' />
-        <param name='language' value='es-ES' />
-        <param name='filter' value='publish=yes' />
-      </object>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Exposición Auditiva: AirPods vs AirPods Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .research-question {
+            font-size: 1.3em;
+            color: #e74c3c;
+            margin-bottom: 25px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .who-definition {
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .who-definition h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
+
+        .carousel-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .carousel-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .carousel-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .nav-button.active {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-content {
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .carousel-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .slide-title {
+            text-align: center;
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .slide-description {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .visualization {
+            width: 100%;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        /* Enhanced Tableau styles */
+        .tableauPlaceholder {
+            width: 100% !important;
+            height: 560px !important;
+            min-height: 560px !important;
+            max-width: 100%;
+            position: relative;
+        }
+
+        .tableauViz {
+            width: 100% !important;
+            height: 560px !important;
+            min-height: 560px !important;
+        }
+
+        /* Enhanced Flourish styles */
+        .flourish-embed {
+            width: 100% !important;
+            height: 560px !important;
+            min-height: 560px !important;
+            max-width: 100%;
+        }
+
+        .flourish-embed iframe {
+            width: 100% !important;
+            height: 560px !important;
+            min-height: 560px !important;
+        }
+
+        /* Fallback styles for visualization errors */
+        .viz-fallback {
+            text-align: center;
+            padding: 100px 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            color: #666;
+            border: 2px dashed #ddd;
+            margin: 20px 0;
+        }
+
+        .viz-fallback h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .viz-fallback p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .navigation-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .navigation-arrows:hover {
+            background: rgba(52, 152, 219, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-arrow {
+            left: 20px;
+        }
+
+        .next-arrow {
+            right: 20px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: #3498db;
+            transform: scale(1.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .research-question {
+                font-size: 1.1em;
+            }
+
+            .carousel-nav {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-button {
+                padding: 10px 16px;
+                font-size: 0.8em;
+            }
+
+            .navigation-arrows {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+
+            .prev-arrow {
+                left: 10px;
+            }
+
+            .next-arrow {
+                right: 10px;
+            }
+
+            .tableauPlaceholder,
+            .flourish-embed {
+                height: 400px !important;
+                min-height: 400px !important;
+            }
+
+            .tableauViz {
+                height: 400px !important;
+                min-height: 400px !important;
+            }
+
+            .flourish-embed iframe {
+                height: 400px !important;
+                min-height: 400px !important;
+            }
+
+            .visualization {
+                min-height: 420px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>¿Los AirPods Pro Reducen el Daño Auditivo?</h1>
+            <p class="research-question">
+                Un análisis comparativo de la exposición auditiva entre AirPods tradicionales y AirPods Pro con cancelación activa de ruido
+            </p>
+            
+            <div class="who-definition">
+                <h3>Definición de la OMS</h3>
+                <p>
+                    Según la Organización Mundial de la Salud, la exposición prolongada a sonidos superiores a 85 dB puede causar daño auditivo permanente. 
+                    Los dispositivos de audio personal pueden alcanzar niveles de hasta 110 dB, equivalente al ruido de una sirena o concierto de rock.
+                    <strong>Se recomienda no exceder 60% del volumen máximo durante más de 60 minutos al día.</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Carousel Section -->
+        <div class="carousel-container">
+            <div class="carousel-header">
+                <h2 class="carousel-title">Visualizaciones de Datos de Exposición Auditiva</h2>
+                
+                <div class="carousel-nav">
+                    <button class="nav-button active" onclick="showSlide(0)">Scatterplot</button>
+                    <button class="nav-button" onclick="showSlide(1)">Bar Chart side by side</button>
+                    <button class="nav-button" onclick="showSlide(2)">Distribución de Niveles</button>
+                    <button class="nav-button" onclick="showSlide(3)">Heatmap según día</button>
+                </div>
+            </div>
+
+            <div class="carousel-content">
+                <!-- Slide 1: Tableau Scatterplot -->
+                <div class="carousel-slide active">
+                    <h3 class="slide-title">Relación entre Nivel de dB y Duración de Exposición</h3>
+                    <p class="slide-description">
+                        Este gráfico de dispersión muestra la relación entre el nivel de decibelios y la duración de exposición (tamaño de los puntos) para ambos tipos de AirPods.
+                        ¿Los AirPods Pro permiten escuchar a menor volumen debido a su cancelación de ruido?
+                        Los puntos mostrados parecieran mostrar que sí ya que se encuentran por debajo de los 80 db en su mayoría.
+                    </p>
+                    <div class="visualization">
+                        <div class='tableauPlaceholder' id='viz1756675145714' style='position: relative; width: 100%; height: 560px;'>
+                            <div class="loading" id="loading1"></div>
+                            <noscript>
+                                <a href='#'>
+                                    <img alt='Exposición a sonido por uso de auriculares ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17565746926250&#47;Scatterplot&#47;1_rss.png' style='border: none; width: 100%; height: auto;' />
+                                </a>
+                            </noscript>
+                            <object class='tableauViz' style='display:none; width: 100%; height: 560px;'>
+                                <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                <param name='embed_code_version' value='3' />
+                                <param name='site_root' value='' />
+                                <param name='name' value='Book1_17565746926250&#47;Scatterplot' />
+                                <param name='tabs' value='no' />
+                                <param name='toolbar' value='yes' />
+                                <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17565746926250&#47;Scatterplot&#47;1.png' />
+                                <param name='animate_transition' value='yes' />
+                                <param name='display_static_image' value='yes' />
+                                <param name='display_spinner' value='yes' />
+                                <param name='display_overlay' value='yes' />
+                                <param name='display_count' value='yes' />
+                                <param name='language' value='es-ES' />
+                            </object>
+                        </div>
+                        <script type='text/javascript'>
+                            (function() {
+                                var divElement = document.getElementById('viz1756675145714');
+                                var vizElement = divElement.getElementsByTagName('object')[0];
+                                var loading = document.getElementById('loading1');
+                                
+                                if (divElement.offsetWidth > 800) {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '560px';
+                                } else if (divElement.offsetWidth > 500) {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '480px';
+                                } else {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '400px';
+                                }
+                                
+                                var scriptElement = document.createElement('script');
+                                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                                
+                                scriptElement.onload = function() {
+                                    console.log('Tableau visualization 1 loaded successfully');
+                                    if (loading) loading.style.display = 'none';
+                                };
+                                
+                                scriptElement.onerror = function() {
+                                    console.error('Error loading Tableau visualization 1');
+                                    if (loading) loading.style.display = 'none';
+                                    divElement.innerHTML = '<div class="viz-fallback"><h3>Visualización de Tableau no disponible</h3><p>Esta visualización requiere conexión a internet. Por favor, verifique su conexión y recargue la página.</p><p><a href="https://public.tableau.com/views/Book1_17565746926250/Scatterplot" target="_blank" style="color: #3498db;">Ver en Tableau Public</a></p></div>';
+                                };
+                                
+                                vizElement.parentNode.insertBefore(scriptElement, vizElement);
+                            })();
+                        </script>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Tableau Bar Chart -->
+                <div class="carousel-slide">
+                    <h3 class="slide-title">Tiempo Total de Exposición por rango de riesgo</h3>
+                    <p class="slide-description">
+                        Comparación del tiempo total de exposición auditiva entre AirPods y AirPods Pro segmentado por rango de riesgo.
+                    </p>
+                    <div class="visualization">
+                        <div class='tableauPlaceholder' id='viz1756675191223' style='position: relative; width: 100%; height: 560px;'>
+                            <div class="loading" id="loading2"></div>
+                            <noscript>
+                                <a href='#'>
+                                    <img alt='Tiempo total de exposición segmentado ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17565746926250&#47;Sidebysidebars&#47;1_rss.png' style='border: none; width: 100%; height: auto;' />
+                                </a>
+                            </noscript>
+                            <object class='tableauViz' style='display:none; width: 100%; height: 560px;'>
+                                <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                <param name='embed_code_version' value='3' />
+                                <param name='site_root' value='' />
+                                <param name='name' value='Book1_17565746926250&#47;Sidebysidebars' />
+                                <param name='tabs' value='no' />
+                                <param name='toolbar' value='yes' />
+                                <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17565746926250&#47;Sidebysidebars&#47;1.png' />
+                                <param name='animate_transition' value='yes' />
+                                <param name='display_static_image' value='yes' />
+                                <param name='display_spinner' value='yes' />
+                                <param name='display_overlay' value='yes' />
+                                <param name='display_count' value='yes' />
+                                <param name='language' value='es-ES' />
+                            </object>
+                        </div>
+                        <script type='text/javascript'>
+                            (function() {
+                                var divElement = document.getElementById('viz1756675191223');
+                                var vizElement = divElement.getElementsByTagName('object')[0];
+                                var loading = document.getElementById('loading2');
+                                
+                                if (divElement.offsetWidth > 800) {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '560px';
+                                } else if (divElement.offsetWidth > 500) {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '480px';
+                                } else {
+                                    vizElement.style.width = '100%';
+                                    vizElement.style.height = '400px';
+                                }
+                                
+                                var scriptElement = document.createElement('script');
+                                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                                
+                                scriptElement.onload = function() {
+                                    console.log('Tableau visualization 2 loaded successfully');
+                                    if (loading) loading.style.display = 'none';
+                                };
+                                
+                                scriptElement.onerror = function() {
+                                    console.error('Error loading Tableau visualization 2');
+                                    if (loading) loading.style.display = 'none';
+                                    divElement.innerHTML = '<div class="viz-fallback"><h3>Visualización de Tableau no disponible</h3><p>Esta visualización requiere conexión a internet. Por favor, verifique su conexión y recargue la página.</p><p><a href="https://public.tableau.com/views/Book1_17565746926250/Sidebysidebars" target="_blank" style="color: #3498db;">Ver en Tableau Public</a></p></div>';
+                                };
+                                
+                                vizElement.parentNode.insertBefore(scriptElement, vizElement);
+                            })();
+                        </script>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Flourish Chart -->
+                <div class="carousel-slide">
+                    <h3 class="slide-title">Distribución de Niveles de Exposición</h3>
+                    <p class="slide-description">
+                        Análisis detallado de la distribución de los niveles de decibelios registrados.
+                        ¿Los AirPods Pro muestran una concentración mayor en niveles más seguros?
+                    </p>
+                    <div class="visualization">
+                        <div class="flourish-embed flourish-chart" data-src="visualisation/24908951" data-height="560">
+                            <script src="https://public.flourish.studio/resources/embed.js"></script>
+                            <noscript>
+                                <img src="https://public.flourish.studio/visualisation/24908951/thumbnail" width="100%" alt="chart visualization" />
+                            </noscript>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Flourish Heatmap -->
+                <div class="carousel-slide">
+                    <h3 class="slide-title">Mapa de Calor: Patrones Temporales de Uso</h3>
+                    <p class="slide-description">
+                        Visualización temporal que muestra los patrones de uso y niveles de exposición a lo largo del tiempo.
+                        ¿Existen diferencias en los horarios de uso entre ambos dispositivos?
+                    </p>
+                    <div class="visualization">
+                        <div class="flourish-embed flourish-heatmap" data-src="visualisation/24909356" data-height="560">
+                            <script src="https://public.flourish.studio/resources/embed.js"></script>
+                            <noscript>
+                                <img src="https://public.flourish.studio/visualisation/24909356/thumbnail" width="100%" alt="heatmap visualization" />
+                            </noscript>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-indicator">
+                <div class="progress-dot active" onclick="showSlide(0)"></div>
+                <div class="progress-dot" onclick="showSlide(1)"></div>
+                <div class="progress-dot" onclick="showSlide(2)"></div>
+                <div class="progress-dot" onclick="showSlide(3)"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Análisis basado en datos reales de uso de AirPods y AirPods Pro | Datos de salud auditiva | 2024</p>
+        </div>
     </div>
-    <script type='text/javascript'>
-      var divElement = document.getElementById('viz1755629227721');
-      var vizElement = divElement.getElementsByTagName('object')[0];
-      vizElement.style.width = '1016px';
-      vizElement.style.height = '991px';
-      var scriptElement = document.createElement('script');
-      scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-      vizElement.parentNode.insertBefore(scriptElement, vizElement);
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 4;
+
+        function showSlide(index) {
+            // Hide all slides
+            const slides = document.querySelectorAll('.carousel-slide');
+            const navButtons = document.querySelectorAll('.nav-button');
+            const progressDots = document.querySelectorAll('.progress-dot');
+
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            navButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            progressDots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+
+            // Show current slide
+            slides[index].classList.add('active');
+            navButtons[index].classList.add('active');
+            progressDots[index].classList.add('active');
+
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % totalSlides;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prevIndex);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (event.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+
+        // Enhanced Flourish loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // Give Flourish embeds some time to load and then force resize
+            setTimeout(function() {
+                const flourishEmbeds = document.querySelectorAll('.flourish-embed');
+                flourishEmbeds.forEach(function(embed) {
+                    const iframe = embed.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = '560px';
+                        iframe.style.minHeight = '560px';
+                    }
+                });
+            }, 3000);
+        });
+
+        // Periodic resize for Flourish visualizations
+        setInterval(function() {
+            const flourishEmbeds = document.querySelectorAll('.flourish-embed iframe');
+            flourishEmbeds.forEach(function(iframe) {
+                if (iframe && iframe.offsetHeight < 480) {
+                    iframe.style.height = '560px';
+                    iframe.style.minHeight = '560px';
+                }
+            });
+        }, 5000);
     </script>
-  </body>
+</body>
 </html>
